@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en-GB">
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    .centered {
+      max-width: 550px;
+      padding: 0;
+      overflow: auto;
+    }
+    h1 {
+      margin-left: 30px;
+    }
+    h3 {
+      color: #757575;
+      margin-left: 30px;
+    }
+    arc-marked {
+      display: block;
+      background-color: #ECEFF1;
+      padding: 10px 30px;
+      margin-bottom: 10px;
+    }
+    .markdown-html.custom p {
+      padding-left: 24px;
+    }
+  </style>
+  <script type="module" src="../node_modules/@advanced-rest-client/arc-demo-helper/arc-demo-helper.js"></script>
+  <script type="module" src="../arc-marked.js"></script>
+</head>
+
+<body>
+  <div class="vertical-section vertical-section-container centered" role="main">
+    <h1>&lt;arc-marked&gt;</h1>
+
+    <section id="config">
+      <h3>Configuration</h3>
+      <label><input type="checkbox" id="breaks">breaks</label>
+      <label><input type="checkbox" id="pedantic">pedantic</label>
+      <label><input type="checkbox" id="sanitize">sanitize</label>
+      <label><input type="checkbox" id="disableRemoteSanitization">disableRemoteSanitization</label>
+      <label><input type="checkbox" id="smartypants">smartypants</label>
+    </section>
+
+    <section>
+      <h3>Inline Text</h3>
+      <arc-marked>
+        <div slot="markdown-html"></div>
+        <script type="text/markdown">
+          ## Markdown Renderer
+
+           <div>This is a HTML container</div>
+
+          Example:
+
+          ```html
+          <paper-toolbar>
+           <paper-icon-button icon="menu"></paper-icon-button>
+           <div class="title">Title</div>
+           <paper-icon-button icon="more"></paper-icon-button>
+          </paper-toolbar>
+          ```
+
+          _Nifty_ features.
+       </script>
+      </arc-marked>
+    </section>
+
+    <section>
+      <h3>Text via Attribute, with custom styling</h3>
+
+      <arc-marked markdown="***Bold and italic***">
+        <div slot="markdown-html" class="markdown-html custom"></div>
+      </arc-marked>
+    </section>
+
+    <section>
+      <h3>Remote content</h3>
+
+      <arc-marked id="remoteContent">
+        <div class="markdown-html"></div>
+        <script type="text/markdown" src="./example.md">
+          Loading markdown...
+       </script>
+      </arc-marked>
+    </section>
+  </div>
+
+  <script>
+  (function() {
+    function configChangedHandler(e) {
+      const prop = e.target.id;
+      const value = e.target.checked;
+      const nodes = document.querySelectorAll('arc-marked');
+      Array.from(nodes).forEach((node) => {
+        node[prop] = value;
+      });
+    }
+    const nodes = document.querySelectorAll('#config input[type="checkbox"]');
+    Array.from(nodes).forEach((node) => {
+      node.addEventListener('change', configChangedHandler);
+    });
+  })();
+  </script>
+</body>
+
+</html>
