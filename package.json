@@ -34,7 +34,7 @@
   "dependencies": {
     "lit-element": "^2.0.1",
     "lit-html": "^1.1.1",
-    "marked": "^0.6.3"
+    "marked": "^0.7.0"
   },
   "devDependencies": {
     "@advanced-rest-client/arc-demo-helper": "^1.0.4",
