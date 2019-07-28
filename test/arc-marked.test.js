@@ -4,92 +4,92 @@ import '../arc-marked.js';
 
 describe('<arc-marked>', () => {
   async function basicFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
         # Test
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function propertyMardownFixture() {
-    return (await fixture(`<arc-marked markdown="# Test">
+    return await fixture(`<arc-marked markdown="# Test">
         <div id="output" slot="markdown-html"></div>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function noContentFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function smartyPantsFixture() {
-    return (await fixture(`<arc-marked smartypants>
+    return await fixture(`<arc-marked smartypants>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
         # foo
         ...
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function camelCaseHTMLFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 \`\`\`html
 <div camelCase></div>
 \`\`\`
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function badHTMLFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 \`\`\`html
 <p><div></p></div>
 \`\`\`
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function camelCaseHTMLWithoutChildFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <script type="text/markdown">
 \`\`\`html
 <div camelCase></div>
 \`\`\`
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function badHTMLWithoutChildFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <script type="text/markdown">
 \`\`\`html
 <p><div></p></div>
 \`\`\`
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function rendererFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
           [Link](http://url.com)
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function sanitizerFixture() {
-    return (await fixture(`<arc-marked sanitize>
+    return await fixture(`<arc-marked sanitize>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 [Link](http://url.com" onclick="alert(1)")
@@ -98,44 +98,44 @@ describe('<arc-marked>', () => {
 <a href="http://url.com" onclick="alert(1)">Link</a>
 \`\`\`
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function remoteContentFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="test/test.md">
+        <script type="text/markdown" src="base/test/test.md">
           # Loading
           Please wait...
         </script>
-      </arc-marked>`));
+      </arc-marked>`);
   }
 
   async function badRemoteContentFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="test/test3.md"></script>
-      </arc-marked>`));
+        <script type="text/markdown" src="base/test/test3.md"></script>
+      </arc-marked>`);
   }
 
   async function sanitizedRemoteContentFixture() {
-    return (await fixture(`<arc-marked>
+    return await fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="test/remoteSanitization.md"></script>
-      </arc-marked>`));
+        <script type="text/markdown" src="base/test/remoteSanitization.md"></script>
+      </arc-marked>`);
   }
 
   async function unsanitizedRemoteContentFixture() {
-    return (await fixture(`<arc-marked disableremotesanitization>
+    return await fixture(`<arc-marked disableremotesanitization>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="test/remoteSanitization.md"></script>
-      </arc-marked>`));
+        <script type="text/markdown" src="base/test/remoteSanitization.md"></script>
+      </arc-marked>`);
   }
 
   // Thanks IE10.
   function isHidden(element) {
     const rect = element.getBoundingClientRect();
-    return (rect.width === 0 && rect.height === 0);
+    return rect.width === 0 && rect.height === 0;
   }
   // Replace reserved HTML characters with their character entity equivalents to
   // match the transform done by Markdown.
@@ -179,7 +179,7 @@ describe('<arc-marked>', () => {
         assert.isTrue(spy.called);
       });
 
-      it(`Setting the same value for ${item[0]} property won\'t trigger renderMarkdown()`, () => {
+      it(`Setting the same value for ${item[0]} property won't trigger renderMarkdown()`, () => {
         const key = item[0];
         const value = item[1];
         element[key] = value;
@@ -295,12 +295,10 @@ describe('<arc-marked>', () => {
         // incorrect HTML should be fixed. It seems that: IE says:
         // <p><div></p></div> -> <p><div><p></p></div> Chrome/FF say:
         // <p><div></p></div> -> <p></p><div><p></p></div>. So that's cool.
-        let isEqualToOneOfThem =
-            proofElement.innerHTML === '<p><div><p></p></div>' ||
-            proofElement.innerHTML === '<p></p><div><p></p></div>';
+        const isEqualToOneOfThem =
+          proofElement.innerHTML === '<p><div><p></p></div>' || proofElement.innerHTML === '<p></p><div><p></p></div>';
         assert.isTrue(isEqualToOneOfThem);
-        expect(outputElement.innerHTML)
-            .to.include(escapeHTML('<p><div></p></div>'));
+        expect(outputElement.innerHTML).to.include(escapeHTML('<p><div></p></div>'));
       });
     });
   });
@@ -324,8 +322,7 @@ describe('<arc-marked>', () => {
         // lowercase per HTML parsing rules. By using `<script>` descendants,
         // content is interpreted as plain text.
         expect(proofElement.innerHTML).to.eql('<div camelcase=""></div>');
-        expect(markedElement.shadowRoot.querySelector('#content').innerHTML)
-            .to.include(escapeHTML('<div camelCase>'));
+        expect(markedElement.shadowRoot.querySelector('#content').innerHTML).to.include(escapeHTML('<div camelCase>'));
       });
     });
 
@@ -350,12 +347,12 @@ describe('<arc-marked>', () => {
         // incorrect HTML should be fixed. It seems that: IE says:
         // <p><div></p></div> -> <p><div><p></p></div> Chrome/FF say:
         // <p><div></p></div> -> <p></p><div><p></p></div>. So that's cool.
-        let isEqualToOneOfThem =
-            proofElement.innerHTML === '<p><div><p></p></div>' ||
-            proofElement.innerHTML === '<p></p><div><p></p></div>';
+        const isEqualToOneOfThem =
+          proofElement.innerHTML === '<p><div><p></p></div>' || proofElement.innerHTML === '<p></p><div><p></p></div>';
         assert.isTrue(isEqualToOneOfThem);
-        expect(markedElement.shadowRoot.querySelector('#content').innerHTML)
-            .to.include(escapeHTML('<p><div></p></div>'));
+        expect(markedElement.shadowRoot.querySelector('#content').innerHTML).to.include(
+          escapeHTML('<p><div></p></div>')
+        );
       });
     });
   });
@@ -373,12 +370,14 @@ describe('<arc-marked>', () => {
 
     it('takes custom sanitizer', function() {
       markedElement.sanitizer = function(input) {
-        return input.replace(/ onclick="[^"]+"/, '');
+        return input.replace(/ onclick="[^"]+"/gim, '');
       };
-      proofElement.innerHTML = '<p>[Link](<a href="http://url.com&quot;">' +
-        'http://url.com"</a> onclick="alert(1)")\n<a href="http://url.com">Link</a></p>\n' +
-        '<pre><code class="language-html">&lt;a href="http://url.com" onclick="alert(1)"' +
-        '&gt;Link&lt;/a&gt;</code></pre>\n';
+
+      proofElement.innerHTML =
+        '<p><a href="http://url.com&quot;">Link</a>\n&lt;a ' +
+        'href="<a href="http://url.com&quot;>Link</a">http://url.com"&gt;Link&lt;/a</a>&gt;</p>\n' +
+        '<pre><code class="language-html">&amp;lt;a href=&amp;quot;http://url.com&amp;quot;&amp;gt;' +
+        'Link&amp;lt;/a&amp;gt;</code></pre>\n';
       expect(outputElement.innerHTML).to.include(proofElement.innerHTML);
     });
   });
@@ -400,8 +399,7 @@ describe('<arc-marked>', () => {
           return `<a href="${href}" target="_blank">${text}</a>`;
         };
       };
-      proofElement.innerHTML =
-          '<a href="http://url.com" target="_blank">Link</a>';
+      proofElement.innerHTML = '<a href="http://url.com" target="_blank">Link</a>';
       expect(outputElement.innerHTML).to.include(proofElement.innerHTML);
     });
   });
@@ -419,8 +417,7 @@ describe('<arc-marked>', () => {
       });
 
       it('renders remote content', function(done) {
-        proofElement.innerHTML =
-            '<h1 id="test">Test</h1>\n<p><a href="http://url.com/">Link</a></p>\n';
+        proofElement.innerHTML = '<h1 id="test">Test</h1>\n<p><a href="http://url.com/">Link</a></p>\n';
         markedElement.addEventListener('marked-loadend', function() {
           expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
           done();
@@ -428,8 +425,7 @@ describe('<arc-marked>', () => {
       });
 
       it('renders content while remote content is loading', function() {
-        proofElement.innerHTML =
-            '<h1 id="loading">Loading</h1>\n<p>Please wait...</p>\n';
+        proofElement.innerHTML = '<h1 id="loading">Loading</h1>\n<p>Please wait...</p>\n';
         expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
       });
 
@@ -437,7 +433,7 @@ describe('<arc-marked>', () => {
         markedElement.addEventListener('marked-loadend', function firstCheck() {
           markedElement.removeEventListener('marked-loadend', firstCheck);
           proofElement.innerHTML = '<h1 id="test-2">Test 2</h1>\n';
-          markedElement.querySelector('[type="text/markdown"]').src = 'test/test2.md';
+          markedElement.querySelector('[type="text/markdown"]').src = 'base/test/test2.md';
           markedElement.addEventListener('marked-loadend', function() {
             expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
             done();
@@ -461,12 +457,11 @@ describe('<arc-marked>', () => {
         });
       });
 
-      it('Doesn\'t render error message when default is prevented', function(done) {
+      it("Doesn't render error message when default is prevented", function(done) {
         proofElement.innerHTML = '';
         markedElement.addEventListener('marked-request-error', function(e) {
           e.preventDefault();
-          nextFrame()
-          .then(() => {
+          nextFrame().then(() => {
             expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
             done();
           });
@@ -483,7 +478,7 @@ describe('<arc-marked>', () => {
         it('sanitizes remote content', function(done) {
           outputElement = markedElement.querySelector('#output');
           proofElement = document.createElement('div');
-          proofElement.innerHTML = '<p>&lt;div&gt;&lt;/div&gt;\n</p>\n';
+          proofElement.innerHTML = '<p>&lt;div&gt;&lt;/div&gt;</p>\n';
           markedElement.addEventListener('marked-loadend', function() {
             assert.isTrue(markedElement.sanitize);
             assert.isNotTrue(markedElement.disableRemoteSanitization);

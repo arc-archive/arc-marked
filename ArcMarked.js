@@ -1,5 +1,35 @@
 import { html, css, LitElement } from 'lit-element';
+import sanitizer from 'dompurify/dist/purify.es.js';
 import './marked-import.js';
+
+const SafeHtmlUtils = {
+  AMP_RE: new RegExp(/&/g),
+  GT_RE: new RegExp(/>/g),
+  LT_RE: new RegExp(/</g),
+  SQUOT_RE: new RegExp(/'/g),
+  QUOT_RE: new RegExp(/"/g),
+  htmlEscape: function(s) {
+    if (typeof s !== 'string') {
+      return s;
+    }
+    if (s.indexOf('&') !== -1) {
+      s = s.replace(SafeHtmlUtils.AMP_RE, '&amp;');
+    }
+    if (s.indexOf('<') !== -1) {
+      s = s.replace(SafeHtmlUtils.LT_RE, '&lt;');
+    }
+    if (s.indexOf('>') !== -1) {
+      s = s.replace(SafeHtmlUtils.GT_RE, '&gt;');
+    }
+    if (s.indexOf('"') !== -1) {
+      s = s.replace(SafeHtmlUtils.QUOT_RE, '&quot;');
+    }
+    if (s.indexOf("'") !== -1) {
+      s = s.replace(SafeHtmlUtils.SQUOT_RE, '&#39;');
+    }
+    return s;
+  }
+};
 /**
 Element wrapper for the [marked](https://github.com/chjj/marked) library.
 
@@ -93,9 +123,9 @@ export default class ArcMarked extends LitElement {
        */
       markdown: { type: String },
       /**
-      * Enable GFM line breaks (regular newlines instead of two spaces for
-      * breaks)
-      */
+       * Enable GFM line breaks (regular newlines instead of two spaces for
+       * breaks)
+       */
       breaks: { type: Boolean },
       /**
        * Conform to obscure parts of markdown.pl as much as possible. Don't fix
@@ -252,9 +282,8 @@ export default class ArcMarked extends LitElement {
       this.markdown = this._unindent(this._markdownElement.textContent);
     }
 
-    const observer =
-        new MutationObserver(this._onScriptAttributeChanged.bind(this));
-    observer.observe(this._markdownElement, {attributes: true});
+    const observer = new MutationObserver(this._onScriptAttributeChanged.bind(this));
+    observer.observe(this._markdownElement, { attributes: true });
   }
 
   connectedCallback() {
@@ -282,10 +311,11 @@ export default class ArcMarked extends LitElement {
   get outputElement() {
     const slot = this.shadowRoot.querySelector('slot');
     if (!slot) {
-      return;
+      return null;
     }
-    const child = slot.assignedNodes().find((node) =>
-      node.nodeType === 1 && node.getAttribute('slot') === 'markdown-html');
+    const child = slot
+      .assignedNodes()
+      .find((node) => node.nodeType === 1 && node.getAttribute('slot') === 'markdown-html');
     return child || this.shadowRoot.querySelector('#content');
   }
 
@@ -316,20 +346,33 @@ export default class ArcMarked extends LitElement {
     if (this.renderer) {
       this.renderer(renderer);
     }
-
+    let data;
+    if (this.sanitize) {
+      if (this.sanitizer) {
+        data = this.sanitizer(this.markdown);
+      } else {
+        data = sanitizer.sanitize(this.markdown);
+        if (typeof data !== 'string') {
+          data = this.markdown;
+        }
+      }
+      data = SafeHtmlUtils.htmlEscape(data);
+    } else {
+      data = this.markdown;
+    }
     const opts = {
       renderer: renderer,
       highlight: this._highlight.bind(this),
       breaks: this.breaks,
-      sanitize: this.sanitize,
-      sanitizer: this.sanitizer,
       pedantic: this.pedantic,
       smartypants: this.smartypants
     };
-    this._outputElement.innerHTML = marked(this.markdown, opts);
-    this.dispatchEvent(new CustomEvent('marked-render-complete', {
-      composed: true
-    }));
+    this._outputElement.innerHTML = marked(data, opts);
+    this.dispatchEvent(
+      new CustomEvent('marked-render-complete', {
+        composed: true
+      })
+    );
   }
 
   /**
@@ -395,23 +438,28 @@ export default class ArcMarked extends LitElement {
     }
 
     xhr.addEventListener('error', this._handleError.bind(this));
-    xhr.addEventListener('loadend', function(e) {
-      const status = this._xhr.status || 0;
-      // Note: if we are using the file:// protocol, the status code will be 0
-      // for all outcomes (successful or otherwise).
-      if (status === 0 || (status >= 200 && status < 300)) {
-        this.sanitize = !this.disableRemoteSanitization;
-        this.markdown = e.target.response;
-      } else {
-        this._handleError(e);
-      }
+    xhr.addEventListener(
+      'loadend',
+      function(e) {
+        const status = this._xhr.status || 0;
+        // Note: if we are using the file:// protocol, the status code will be 0
+        // for all outcomes (successful or otherwise).
+        if (status === 0 || (status >= 200 && status < 300)) {
+          this.sanitize = !this.disableRemoteSanitization;
+          this.markdown = e.target.response;
+        } else {
+          this._handleError(e);
+        }
 
-      this.dispatchEvent(new CustomEvent('marked-loadend', {
-        composed: true,
-        bubbles: true,
-        detail: e
-      }));
-    }.bind(this));
+        this.dispatchEvent(
+          new CustomEvent('marked-loadend', {
+            composed: true,
+            bubbles: true,
+            detail: e
+          })
+        );
+      }.bind(this)
+    );
 
     xhr.open('GET', url);
     xhr.setRequestHeader('Accept', 'text/markdown');
@@ -450,9 +498,9 @@ export default class ArcMarked extends LitElement {
 
   render() {
     return html`
-    <slot name="markdown-html">
-      <div id="content"></div>
-    </slot>
+      <slot name="markdown-html">
+        <div id="content"></div>
+      </slot>
     `;
   }
 }
