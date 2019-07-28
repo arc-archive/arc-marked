@@ -26,8 +26,6 @@
       padding-left: 24px;
     }
   </style>
-  <script type="module" src="../node_modules/@advanced-rest-client/arc-demo-helper/arc-demo-helper.js"></script>
-  <script type="module" src="../arc-marked.js"></script>
 </head>
 
 <body>
@@ -78,7 +76,7 @@
     <section>
       <h3>Remote content</h3>
 
-      <arc-marked id="remoteContent">
+      <arc-marked id="remoteContent" disableremotesanitization>
         <div class="markdown-html"></div>
         <script type="text/markdown" src="./example.md">
           Loading markdown...
@@ -87,22 +85,7 @@
     </section>
   </div>
 
-  <script>
-  (function() {
-    function configChangedHandler(e) {
-      const prop = e.target.id;
-      const value = e.target.checked;
-      const nodes = document.querySelectorAll('arc-marked');
-      Array.from(nodes).forEach((node) => {
-        node[prop] = value;
-      });
-    }
-    const nodes = document.querySelectorAll('#config input[type="checkbox"]');
-    Array.from(nodes).forEach((node) => {
-      node.addEventListener('change', configChangedHandler);
-    });
-  })();
-  </script>
+  <script type="module" src="./index.js"></script>
 </body>
 
 </html>
