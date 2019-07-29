@@ -109,9 +109,8 @@ export default class ArcMarked extends LitElement {
   static get styles() {
     return css`
       :host {
-        background: grey;
         display: block;
-        padding: 25px;
+        padding: 24px;
       }
     `;
   }
