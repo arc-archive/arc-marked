@@ -1,5 +1,5 @@
 import { nextFrame, fixture, expect, assert } from '@open-wc/testing';
-import sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon/pkg/sinon-esm.js';
 import '../arc-marked.js';
 
 describe('<arc-marked>', () => {
@@ -374,9 +374,11 @@ describe('<arc-marked>', () => {
       };
 
       proofElement.innerHTML =
-        '<p><a href="http://url.com&quot;">Link</a>\n&lt;a ' +
-        'href="<a href="http://url.com&quot;>Link</a">http://url.com"&gt;Link&lt;/a</a>&gt;</p>\n' +
-        '<pre><code class="language-html">&amp;lt;a href=&amp;quot;http://url.com&amp;quot;&amp;gt;' +
+        '<p>[Link](<a href="http://url.com">http://url.com</a>" ' +
+        'onclick="alert(1)")\n&lt;a href="<a href="http://url.com">' +
+        'http://url.com</a>" onclick="alert(1)"&gt;Link&lt;/a&gt;</p>\n' +
+        '<pre><code class="language-html">&amp;lt;a href=&amp;quot;' +
+        'http://url.com&amp;quot; onclick=&amp;quot;alert(1)&amp;quot;&amp;gt;' +
         'Link&amp;lt;/a&amp;gt;</code></pre>\n';
       expect(outputElement.innerHTML).to.include(proofElement.innerHTML);
     });
