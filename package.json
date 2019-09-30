@@ -1,7 +1,7 @@
 {
   "name": "@advanced-rest-client/arc-marked",
   "description": "Port of Polymer's marked-element to LitElement",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "Apache-2.0",
   "main": "arc-marked.js",
   "keywords": [
