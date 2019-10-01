@@ -366,6 +366,8 @@ export default class ArcMarked extends LitElement {
         const result = sanitizer.sanitize(out);
         if (typeof result === 'string') {
           out = result;
+        } else {
+          out = result.toString();
         }
       }
     }
