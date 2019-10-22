@@ -1,35 +1,6 @@
 import { html, css, LitElement } from 'lit-element';
 import sanitizer from 'dompurify/dist/purify.es.js';
 import './marked-import.js';
-
-const SafeHtmlUtils = {
-  AMP_RE: new RegExp(/&/g),
-  GT_RE: new RegExp(/>/g),
-  LT_RE: new RegExp(/</g),
-  SQUOT_RE: new RegExp(/'/g),
-  QUOT_RE: new RegExp(/"/g),
-  htmlEscape: function(s) {
-    if (typeof s !== 'string') {
-      return s;
-    }
-    if (s.indexOf('&') !== -1) {
-      s = s.replace(SafeHtmlUtils.AMP_RE, '&amp;');
-    }
-    if (s.indexOf('<') !== -1) {
-      s = s.replace(SafeHtmlUtils.LT_RE, '&lt;');
-    }
-    if (s.indexOf('>') !== -1) {
-      s = s.replace(SafeHtmlUtils.GT_RE, '&gt;');
-    }
-    if (s.indexOf('"') !== -1) {
-      s = s.replace(SafeHtmlUtils.QUOT_RE, '&quot;');
-    }
-    if (s.indexOf("'") !== -1) {
-      s = s.replace(SafeHtmlUtils.SQUOT_RE, '&#39;');
-    }
-    return s;
-  }
-};
 /**
 Element wrapper for the [marked](https://github.com/chjj/marked) library.
 
@@ -345,12 +316,7 @@ export default class ArcMarked extends LitElement {
     if (this.renderer) {
       this.renderer(renderer);
     }
-    let data;
-    if (this.sanitize) {
-      data = SafeHtmlUtils.htmlEscape(this.markdown);
-    } else {
-      data = this.markdown;
-    }
+    const data = this.markdown;
     const opts = {
       renderer: renderer,
       highlight: this._highlight.bind(this),

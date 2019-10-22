@@ -1,5 +1,13 @@
 ## Markdown Renderer
 
+JSON example:
+
+```json
+{
+  "test": "true"
+}
+```
+
 Example:
 
 ```html

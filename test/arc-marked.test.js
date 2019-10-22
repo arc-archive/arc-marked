@@ -374,12 +374,9 @@ describe('<arc-marked>', () => {
       };
 
       proofElement.innerHTML =
-        '<p>[Link](<a href="http://url.com">http://url.com</a>" ' +
-        'onclick="alert(1)")\n&lt;a href="<a href="http://url.com">' +
-        'http://url.com</a>" onclick="alert(1)"&gt;Link&lt;/a&gt;</p>\n' +
-        '<pre><code class="language-html">&amp;lt;a href=&amp;quot;' +
-        'http://url.com&amp;quot; onclick=&amp;quot;alert(1)&amp;quot;&amp;gt;' +
-        'Link&amp;lt;/a&amp;gt;</code></pre>\n';
+        '<p>[Link](<a href="http://url.com&quot;">http://url.com"</a> onclick="alert(1)")\n' +
+        '<a href="http://url.com">Link</a></p>\n<pre><code class="language-html">&lt;a ' +
+        'href="http://url.com" onclick="alert(1)"&gt;Link&lt;/a&gt;</code></pre>\n';
       expect(outputElement.innerHTML).to.include(proofElement.innerHTML);
     });
   });
@@ -480,7 +477,7 @@ describe('<arc-marked>', () => {
         it('sanitizes remote content', function(done) {
           outputElement = markedElement.querySelector('#output');
           proofElement = document.createElement('div');
-          proofElement.innerHTML = '<p>&lt;div&gt;&lt;/div&gt;</p>\n';
+          proofElement.innerHTML = '<div></div>\n';
           markedElement.addEventListener('marked-loadend', function() {
             assert.isTrue(markedElement.sanitize);
             assert.isNotTrue(markedElement.disableRemoteSanitization);
