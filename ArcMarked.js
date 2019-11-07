@@ -81,7 +81,7 @@ export default class ArcMarked extends LitElement {
     return css`
       :host {
         display: block;
-        padding: 24px;
+        padding: 4px;
       }
     `;
   }
