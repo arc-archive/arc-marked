@@ -77,7 +77,7 @@ as you would a regular DOM element:
 @demo demo/index.html
  */
 export default class ArcMarked extends LitElement {
-  static get styles() {
+  get styles() {
     return css`
       :host {
         display: block;
@@ -468,6 +468,9 @@ export default class ArcMarked extends LitElement {
 
   render() {
     return html`
+      <style>
+        ${this.styles}
+      </style>
       <slot name="markdown-html">
         <div id="content"></div>
       </slot>
