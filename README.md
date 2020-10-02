@@ -1,12 +1,12 @@
-[![Published on NPM](https://img.shields.io/npm/v/@advanced-rest-client/arc-marked.svg)](https://www.npmjs.com/package/@advanced-rest-client/arc-marked)
-
-[![Build Status](https://travis-ci.org/advanced-rest-client/arc-marked.svg?branch=stage)](https://travis-ci.org/advanced-rest-client/arc-marked)
-
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/arc-marked)
-
 # arc-marked
 
-Port of Polymer's marked-element to LitElement
+A port of Polymer's marked-element to LitElement with additional big fixes.
+
+[![Published on NPM](https://img.shields.io/npm/v/@advanced-rest-client/arc-marked.svg)](https://www.npmjs.com/package/@advanced-rest-client/arc-marked)
+
+[![Build Status](https://travis-ci.com/advanced-rest-client/arc-marked.svg)](https://travis-ci.com/advanced-rest-client/arc-marked)
+
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/arc-marked)
 
 ```html
 <arc-marked>
@@ -31,14 +31,11 @@ Port of Polymer's marked-element to LitElement
 </arc-marked>
 ```
 
-### API components
-
-This components is a part of [API components ecosystem](https://elements.advancedrestclient.com/)
-
 ## Usage
 
 ### Installation
-```
+
+```sh
 npm install --save @advanced-rest-client/arc-marked
 ```
 
@@ -73,7 +70,7 @@ class SampleElement extends LitElement {
 customElements.define('sample-element', SampleElement);
 ```
 
-### Installation
+## Development
 
 ```sh
 git clone https://github.com/advanced-rest-client/arc-marked
@@ -88,6 +85,7 @@ npm start
 ```
 
 ### Running the tests
+
 ```sh
 npm test
 ```

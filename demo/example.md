@@ -1,4 +1,4 @@
-## Markdown Renderer
+# Markdown Renderer
 
 JSON example:
 
@@ -19,3 +19,9 @@ Example:
 ```
 
 _Nifty_ features.
+
+## Security
+
+[Link](http://url.com" onclick="alert('This should not happen')")
+
+<a href="http://url.com" onclick="alert('This should not happen')">Link</a>

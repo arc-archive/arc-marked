@@ -1,0 +1,98 @@
+{
+  "version": "experimental",
+  "tags": [
+    {
+      "name": "arc-marked",
+      "path": "./arc-marked.js",
+      "description": "Element wrapper for the [marked](https://github.com/chjj/marked) library.\n\nBased on Polymer's `marked-element`.\n\n`<marked-element>` accepts Markdown source and renders it to a child\nelement with the class `markdown-html`. This child element can be styled\nas you would a normal DOM element. If you do not provide a child element\nwith the `markdown-html` class, the Markdown source will still be rendered,\nbut to a shadow DOM child that cannot be styled.\n\n### Markdown Content\n\nThe Markdown source can be specified several ways:\n\n#### Use the `markdown` attribute to bind markdown\n\n```html\n<marked-element markdown=\"`Markdown` is _awesome_!\">\n<div slot=\"markdown-html\"></div>\n</marked-element>\n```\n#### Use `<script type=\"text/markdown\">` element child to inline markdown\n\n```html\n<marked-element>\n<div slot=\"markdown-html\"></div>\n<script type=\"text/markdown\">\nCheck out my markdown!\nWe can even embed elements without fear of the HTML parser mucking up their\ntextual representation:\n</script>\n</marked-element>\n```\n#### Use `<script type=\"text/markdown\" src=\"URL\">` element child to specify remote markdown\n\n```html\n<marked-element>\n<div slot=\"markdown-html\"></div>\n<script type=\"text/markdown\" src=\"../guidelines.md\"></script>\n</marked-element>\n```\n\nNote that the `<script type=\"text/markdown\">` approach is *static*. Changes to\nthe script content will *not* update the rendered markdown!\n\nThough, you can data bind to the `src` attribute to change the markdown.\n\n```html\n<marked-element>\n<div slot=\"markdown-html\"></div>\n<script type=\"text/markdown\" src$=\"[[source]]\"></script>\n</marked-element>\n<script>\n...\nthis.source = '../guidelines.md';\n</script>\n```\n\n### Styling\n\nIf you are using a child with the `markdown-html` class, you can style it\nas you would a regular DOM element:\n\n```css\n[slot=\"markdown-html\"] p {\ncolor: red;\n}\n[slot=\"markdown-html\"] td:first-child {\npadding-left: 24px;\n}\n```",
+      "attributes": [
+        {
+          "name": "markdown",
+          "description": "The markdown source that should be rendered by this element.",
+          "type": "string"
+        },
+        {
+          "name": "breaks",
+          "description": "Enable GFM line breaks (regular newlines instead of two spaces for breaks)",
+          "type": "boolean"
+        },
+        {
+          "name": "pedantic",
+          "description": "Conform to obscure parts of markdown.pl as much as possible. Don't fix\nany of the original markdown bugs or poor behavior.",
+          "type": "boolean"
+        },
+        {
+          "name": "sanitize",
+          "description": "Sanitize the output. Ignore any HTML that has been input.",
+          "type": "boolean"
+        },
+        {
+          "name": "disableRemoteSanitization",
+          "description": "If true, disables the default sanitization of any markdown received by\na request and allows fetched un-sanitized markdown\n\ne.g. fetching markdown via `src` that has HTML.\nNote: this value overrides `sanitize` if a request is made.",
+          "type": "boolean"
+        },
+        {
+          "name": "smartypants",
+          "description": "Use \"smart\" typographic punctuation for things like quotes and dashes.",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "styles",
+          "type": "CSSResult"
+        },
+        {
+          "name": "markdown",
+          "attribute": "markdown",
+          "description": "The markdown source that should be rendered by this element.",
+          "type": "string"
+        },
+        {
+          "name": "breaks",
+          "attribute": "breaks",
+          "description": "Enable GFM line breaks (regular newlines instead of two spaces for breaks)",
+          "type": "boolean"
+        },
+        {
+          "name": "pedantic",
+          "attribute": "pedantic",
+          "description": "Conform to obscure parts of markdown.pl as much as possible. Don't fix\nany of the original markdown bugs or poor behavior.",
+          "type": "boolean"
+        },
+        {
+          "name": "renderer",
+          "description": "Function used to customize a renderer based on the [API specified in the\nMarked\nlibrary](https://github.com/chjj/marked#overriding-renderer-methods).\nIt takes one argument: a marked renderer object, which is mutated by the function.",
+          "type": "Function"
+        },
+        {
+          "name": "sanitize",
+          "attribute": "sanitize",
+          "description": "Sanitize the output. Ignore any HTML that has been input.",
+          "type": "boolean"
+        },
+        {
+          "name": "sanitizer",
+          "description": "Function used to customize a sanitize behavior.\nIt takes one argument: element String without text Contents.\n\ne.g. `<div>` `<a href=\"/\">` `</p>'.\nNote: To enable this function, must set `sanitize` to true.\nWARNING: If you are using this option to un-trusted text, you must to\nprevent XSS Attacks.",
+          "type": "Function"
+        },
+        {
+          "name": "disableRemoteSanitization",
+          "attribute": "disableRemoteSanitization",
+          "description": "If true, disables the default sanitization of any markdown received by\na request and allows fetched un-sanitized markdown\n\ne.g. fetching markdown via `src` that has HTML.\nNote: this value overrides `sanitize` if a request is made.",
+          "type": "boolean"
+        },
+        {
+          "name": "smartypants",
+          "attribute": "smartypants",
+          "description": "Use \"smart\" typographic punctuation for things like quotes and dashes.",
+          "type": "boolean"
+        },
+        {
+          "name": "outputElement",
+          "type": "HTMLElement"
+        }
+      ]
+    }
+  ]
+}

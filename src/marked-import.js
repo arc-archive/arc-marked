@@ -6,3 +6,5 @@ if (!window.marked) {
   // https://github.com/PolymerElements/marked-element/issues/81
   window.marked = marked;
 }
+
+export {};

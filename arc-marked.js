@@ -1,3 +1,3 @@
-import ArcMarked from './ArcMarked.js';
-export {ArcMarked};
-window.customElements.define('arc-marked', ArcMarked);
+import { ArcMarkedElement } from './src/ArcMarkedElement.js';
+
+window.customElements.define('arc-marked', ArcMarkedElement);

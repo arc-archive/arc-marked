@@ -1,34 +1,46 @@
-import { nextFrame, fixture, expect, assert } from '@open-wc/testing';
+/* eslint-disable no-param-reassign */
+import { nextFrame, fixture, expect, assert, aTimeout } from '@open-wc/testing';
 import * as sinon from 'sinon/pkg/sinon-esm.js';
 import '../arc-marked.js';
 
-describe('<arc-marked>', () => {
+/** @typedef {import('../').ArcMarkedElement} ArcMarkedElement */
+
+describe('ArcMarkedElement', () => {
+  /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function basicFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
         # Test
         </script>
       </arc-marked>`);
   }
-
-  async function propertyMardownFixture() {
-    return await fixture(`<arc-marked markdown="# Test">
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
+  async function propertyMarkdownFixture() {
+    return fixture(`<arc-marked markdown="# Test">
         <div id="output" slot="markdown-html"></div>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function noContentFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function smartyPantsFixture() {
-    return await fixture(`<arc-marked smartypants>
+    return fixture(`<arc-marked smartypants>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
         # foo
@@ -36,9 +48,11 @@ describe('<arc-marked>', () => {
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function camelCaseHTMLFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 \`\`\`html
@@ -47,9 +61,11 @@ describe('<arc-marked>', () => {
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function badHTMLFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 \`\`\`html
@@ -58,9 +74,11 @@ describe('<arc-marked>', () => {
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function camelCaseHTMLWithoutChildFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <script type="text/markdown">
 \`\`\`html
 <div camelCase></div>
@@ -68,9 +86,11 @@ describe('<arc-marked>', () => {
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function badHTMLWithoutChildFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <script type="text/markdown">
 \`\`\`html
 <p><div></p></div>
@@ -78,18 +98,22 @@ describe('<arc-marked>', () => {
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function rendererFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
           [Link](http://url.com)
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function sanitizerFixture() {
-    return await fixture(`<arc-marked sanitize>
+    return fixture(`<arc-marked sanitize>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 [Link](http://url.com" onclick="alert(1)")
@@ -100,9 +124,11 @@ describe('<arc-marked>', () => {
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function remoteContentFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown" src="base/test/test.md">
           # Loading
@@ -110,23 +136,29 @@ describe('<arc-marked>', () => {
         </script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function badRemoteContentFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown" src="base/test/test3.md"></script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function sanitizedRemoteContentFixture() {
-    return await fixture(`<arc-marked>
+    return fixture(`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown" src="base/test/remoteSanitization.md"></script>
       </arc-marked>`);
   }
-
+   /**
+   * @returns {Promise<ArcMarkedElement>}
+   */
   async function unsanitizedRemoteContentFixture() {
-    return await fixture(`<arc-marked disableremotesanitization>
+    return fixture(`<arc-marked disableRemoteSanitization>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown" src="base/test/remoteSanitization.md"></script>
       </arc-marked>`);
@@ -137,6 +169,7 @@ describe('<arc-marked>', () => {
     const rect = element.getBoundingClientRect();
     return rect.width === 0 && rect.height === 0;
   }
+
   // Replace reserved HTML characters with their character entity equivalents to
   // match the transform done by Markdown.
   //
@@ -148,8 +181,8 @@ describe('<arc-marked>', () => {
     return span.innerHTML;
   }
 
-  describe('Propery setters', () => {
-    let element;
+  describe('Property setters', () => {
+    let element = /** @type ArcMarkedElement */ (null);
     beforeEach(async () => {
       element = await basicFixture();
     });
@@ -158,13 +191,13 @@ describe('<arc-marked>', () => {
       ['markdown', 'test'],
       ['breaks', true],
       ['pedantic', true],
-      ['renderer', function() {}],
+      ['renderer', () => {}],
       ['sanitize', true],
-      ['sanitizer', function() {}],
+      ['sanitizer', () => {}],
       ['smartypants', true]
     ].forEach((item) => {
       it(`Sets ${item[0]} property`, () => {
-        const key = item[0];
+        const key = String(item[0]);
         const value = item[1];
         element[key] = value;
         assert.equal(element[key], value, 'Getter has the value');
@@ -172,7 +205,7 @@ describe('<arc-marked>', () => {
       });
 
       it(`Setting ${item[0]} property triggers renderMarkdown()`, () => {
-        const key = item[0];
+        const key = String(item[0]);
         const value = item[1];
         const spy = sinon.spy(element, 'renderMarkdown');
         element[key] = value;
@@ -180,7 +213,7 @@ describe('<arc-marked>', () => {
       });
 
       it(`Setting the same value for ${item[0]} property won't trigger renderMarkdown()`, () => {
-        const key = item[0];
+        const key = String(item[0]);
         const value = item[1];
         element[key] = value;
         const spy = sinon.spy(element, 'renderMarkdown');
@@ -190,11 +223,11 @@ describe('<arc-marked>', () => {
     });
   });
 
-  describe('<arc-marked> renders mardown from property setter', function() {
-    let outputElement;
+  describe('<arc-marked> renders markdown from property setter', () => {
+    let outputElement = /** @type HTMLDivElement */ (null);
     beforeEach(async () => {
-      await propertyMardownFixture();
-      outputElement = document.getElementById('output');
+      await propertyMarkdownFixture();
+      outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
     });
 
     it('Renders the code', () => {
@@ -202,45 +235,45 @@ describe('<arc-marked>', () => {
     });
   });
 
-  describe('<arc-marked> has some options of marked available', function() {
-    let markedElement;
+  describe('<arc-marked> has some options of marked available', () => {
+    let markedElement = /** @type ArcMarkedElement */ (null);
     beforeEach(async () => {
       markedElement = await smartyPantsFixture();
     });
 
-    it('has sanitize', function() {
+    it('has sanitize', () => {
       expect(markedElement.sanitize).to.equal(false);
     });
 
-    it('has sanitizer', function() {
+    it('has sanitizer', () => {
       expect(markedElement.sanitizer).to.equal(undefined);
     });
 
-    it('has pedantic', function() {
+    it('has pedantic', () => {
       expect(markedElement.pedantic).to.equal(false);
     });
 
-    it('has breaks', function() {
+    it('has breaks', () => {
       expect(markedElement.breaks).to.equal(false);
     });
 
-    it('has smartypants', function() {
+    it('has smartypants', () => {
       expect(markedElement.smartypants).to.equal(true);
     });
   });
 
-  describe('<arc-marked> with .markdown-html child', function() {
-    describe('ignores no content', function() {
-      let markedElement;
+  describe('<arc-marked> with .markdown-html child', () => {
+    describe('ignores no content', () => {
+      let markedElement = /** @type ArcMarkedElement */ (null);
+      let outputElement = /** @type HTMLDivElement */ (null);
       let proofElement;
-      let outputElement;
       beforeEach(async () => {
         markedElement = await noContentFixture();
         proofElement = document.createElement('div');
-        outputElement = document.getElementById('output');
+        outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
       });
 
-      it('in code blocks', function() {
+      it('in code blocks', () => {
         proofElement.innerHTML = '';
         assert.equal(outputElement, markedElement.outputElement);
         assert.isTrue(isHidden(markedElement.shadowRoot.querySelector('#content')));
@@ -249,18 +282,18 @@ describe('<arc-marked>', () => {
       });
     });
 
-    describe('respects camelCased HTML', function() {
-      let markedElement;
+    describe('respects camelCased HTML', () => {
+      let markedElement = /** @type ArcMarkedElement */ (null);
+      let outputElement = /** @type HTMLDivElement */ (null);
       let proofElement;
-      let outputElement;
 
       beforeEach(async () => {
         markedElement = await camelCaseHTMLFixture();
         proofElement = document.createElement('div');
-        outputElement = document.getElementById('output');
+        outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
       });
 
-      it('in code blocks', function() {
+      it('in code blocks', () => {
         proofElement.innerHTML = '<div camelCase></div>';
         expect(outputElement).to.equal(markedElement.outputElement);
         assert.isTrue(isHidden(markedElement.shadowRoot.querySelector('#content')));
@@ -273,18 +306,18 @@ describe('<arc-marked>', () => {
       });
     });
 
-    describe('respects bad HTML', function() {
-      let markedElement;
+    describe('respects bad HTML', () => {
+      let markedElement = /** @type ArcMarkedElement */ (null);
       let proofElement;
-      let outputElement;
+      let outputElement = /** @type HTMLDivElement */ (null);
 
       beforeEach(async () => {
         markedElement = await badHTMLFixture();
         proofElement = document.createElement('div');
-        outputElement = document.getElementById('output');
+        outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
       });
 
-      it('in code blocks', function() {
+      it('in code blocks', () => {
         proofElement.innerHTML = '<p><div></p></div>';
         expect(outputElement).to.equal(markedElement.outputElement);
         assert.isTrue(isHidden(markedElement.shadowRoot.querySelector('#content')));
@@ -303,9 +336,9 @@ describe('<arc-marked>', () => {
     });
   });
 
-  describe('<arc-marked> without .markdown-html child', function() {
-    describe('respects camelCased HTML', function() {
-      let markedElement;
+  describe('<arc-marked> without .markdown-html child', () => {
+    describe('respects camelCased HTML', () => {
+      let markedElement = /** @type ArcMarkedElement */ (null);
       let proofElement;
       beforeEach(async () => {
         markedElement = await camelCaseHTMLWithoutChildFixture();
@@ -326,8 +359,8 @@ describe('<arc-marked>', () => {
       });
     });
 
-    describe('respects bad HTML', function() {
-      let markedElement;
+    describe('respects bad HTML', () => {
+      let markedElement = /** @type ArcMarkedElement */ (null);
       let proofElement;
 
       beforeEach(async () => {
@@ -357,19 +390,19 @@ describe('<arc-marked>', () => {
     });
   });
 
-  describe('<arc-marked> with custom sanitizer', function() {
-    let markedElement;
-    let outputElement;
+  describe('<arc-marked> with custom sanitizer', () => {
+    let markedElement = /** @type ArcMarkedElement */ (null);
+    let outputElement = /** @type HTMLDivElement */ (null);
     let proofElement;
 
     beforeEach(async () => {
       markedElement = await sanitizerFixture();
-      outputElement = document.getElementById('output');
+      outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
       proofElement = document.createElement('div');
     });
 
-    it('takes custom sanitizer', function() {
-      markedElement.sanitizer = function(input) {
+    it('takes custom sanitizer', () => {
+      markedElement.sanitizer = (input) => {
         return input.replace(/ onclick="[^"]+"/gim, '');
       };
 
@@ -381,19 +414,19 @@ describe('<arc-marked>', () => {
     });
   });
 
-  describe('<arc-marked> with custom renderer', function() {
-    let markedElement;
-    let outputElement;
+  describe('<arc-marked> with custom renderer', () => {
+    let markedElement = /** @type ArcMarkedElement */ (null);
+    let outputElement = /** @type HTMLDivElement */ (null);
     let proofElement;
 
     beforeEach(async () => {
       markedElement = await rendererFixture();
-      outputElement = document.getElementById('output');
+      outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
       proofElement = document.createElement('div');
     });
 
-    it('takes custom link renderer', function() {
-      markedElement.renderer = function(renderer) {
+    it('takes custom link renderer', () => {
+      markedElement.renderer = (renderer) => {
         renderer.link = (href, title, text) => {
           return `<a href="${href}" target="_blank">${text}</a>`;
         };
@@ -403,37 +436,38 @@ describe('<arc-marked>', () => {
     });
   });
 
-  describe('<arc-marked> with remote content', function() {
-    let markedElement;
-    let outputElement;
+  describe('<arc-marked> with remote content', () => {
+    let markedElement = /** @type ArcMarkedElement */ (null);
+    let outputElement = /** @type HTMLDivElement */ (null);
     let proofElement;
 
-    describe('succesful fetch', function() {
+    describe('successful fetch', () => {
       beforeEach(async () => {
         markedElement = await remoteContentFixture();
-        outputElement = document.getElementById('output');
+        outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
         proofElement = document.createElement('div');
       });
 
-      it('renders remote content', function(done) {
+      it('renders remote content', (done) => {
         proofElement.innerHTML = '<h1 id="test">Test</h1>\n<p><a href="http://url.com/">Link</a></p>\n';
-        markedElement.addEventListener('marked-loadend', function() {
+        markedElement.addEventListener('markedloaded', () => {
           expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
           done();
         });
       });
 
-      it('renders content while remote content is loading', function() {
+      it('renders content while remote content is loading', () => {
         proofElement.innerHTML = '<h1 id="loading">Loading</h1>\n<p>Please wait...</p>\n';
         expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
       });
 
-      it('renders new remote content when src changes', function(done) {
-        markedElement.addEventListener('marked-loadend', function firstCheck() {
-          markedElement.removeEventListener('marked-loadend', firstCheck);
+      it('renders new remote content when src changes', (done) => {
+        markedElement.addEventListener('markedloaded', function firstCheck() {
+          markedElement.removeEventListener('markedloaded', firstCheck);
           proofElement.innerHTML = '<h1 id="test-2">Test 2</h1>\n';
+          // @ts-ignore
           markedElement.querySelector('[type="text/markdown"]').src = 'base/test/test2.md';
-          markedElement.addEventListener('marked-loadend', function() {
+          markedElement.addEventListener('markedloaded', () => {
             expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
             done();
           });
@@ -441,24 +475,25 @@ describe('<arc-marked>', () => {
       });
     });
 
-    describe('fails to load', function() {
+    describe('fails to load', () => {
       beforeEach(async () => {
         markedElement = await badRemoteContentFixture();
-        outputElement = document.getElementById('output');
+        outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
         proofElement = document.createElement('div');
       });
 
-      it('renders error message', function(done) {
+      it('renders error message', (done) => {
         proofElement.innerHTML = '<p>Failed loading markdown source</p>\n';
-        markedElement.addEventListener('marked-loadend', function() {
+        markedElement.addEventListener('markedloaderror', async () => {
+          await aTimeout(0);
           expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
           done();
         });
       });
 
-      it("Doesn't render error message when default is prevented", function(done) {
+      it("Doesn't render error message when default is prevented", (done) => {
         proofElement.innerHTML = '';
-        markedElement.addEventListener('marked-request-error', function(e) {
+        markedElement.addEventListener('markedloaderror', (e) => {
           e.preventDefault();
           nextFrame().then(() => {
             expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
@@ -468,17 +503,17 @@ describe('<arc-marked>', () => {
       });
     });
 
-    describe('sanitizing remote content', function() {
-      describe('sanitized', function() {
+    describe('sanitizing remote content', () => {
+      describe('sanitized', () => {
         beforeEach(async () => {
           markedElement = await sanitizedRemoteContentFixture();
         });
 
-        it('sanitizes remote content', function(done) {
+        it('sanitizes remote content', (done) => {
           outputElement = markedElement.querySelector('#output');
           proofElement = document.createElement('div');
           proofElement.innerHTML = '<div></div>\n';
-          markedElement.addEventListener('marked-loadend', function() {
+          markedElement.addEventListener('markedloaded', () => {
             assert.isTrue(markedElement.sanitize);
             assert.isNotTrue(markedElement.disableRemoteSanitization);
             expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
@@ -487,16 +522,16 @@ describe('<arc-marked>', () => {
         });
       });
 
-      describe('unsanitized', function() {
+      describe('unsanitized', () => {
         beforeEach(async () => {
           markedElement = await unsanitizedRemoteContentFixture();
         });
 
-        it('Does not sanitize remote content', function(done) {
+        it('Does not sanitize remote content', (done) => {
           outputElement = markedElement.querySelector('#output');
           proofElement = document.createElement('div');
           proofElement.innerHTML = '<div></div>\n';
-          markedElement.addEventListener('marked-loadend', function() {
+          markedElement.addEventListener('markedloaded', () => {
             assert.isNotTrue(markedElement.sanitize);
             assert.isTrue(markedElement.disableRemoteSanitization);
             expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
@@ -507,16 +542,16 @@ describe('<arc-marked>', () => {
     });
   });
 
-  describe('events', function() {
-    let markedElement;
-    let outputElement;
+  describe('events', () => {
+    let markedElement = /** @type ArcMarkedElement */ (null);
+    let outputElement = /** @type HTMLDivElement */ (null);
     beforeEach(async () => {
       markedElement = await camelCaseHTMLFixture();
-      outputElement = document.getElementById('output');
+      outputElement = /** @type HTMLDivElement */ (document.getElementById('output'));
     });
 
-    it('render() fires marked-render-complete', function(done) {
-      markedElement.addEventListener('marked-render-complete', function() {
+    it('render() fires markedrendercomplete', (done) => {
+      markedElement.addEventListener('markedrendercomplete', () => {
         expect(outputElement.innerHTML).to.not.equal('');
         done();
       });

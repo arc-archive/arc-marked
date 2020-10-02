@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import '@advanced-rest-client/arc-demo-helper/arc-demo-helper.js';
 import '../arc-marked.js';
 
