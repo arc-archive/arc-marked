@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { nextFrame, fixture, expect, assert, aTimeout } from '@open-wc/testing';
+import { nextFrame, fixture, expect, assert, aTimeout, html } from '@open-wc/testing';
 import * as sinon from 'sinon/pkg/sinon-esm.js';
 import '../arc-marked.js';
 
@@ -10,7 +10,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function basicFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
         # Test
@@ -21,7 +21,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function propertyMarkdownFixture() {
-    return fixture(`<arc-marked markdown="# Test">
+    return fixture(html`<arc-marked markdown="# Test">
         <div id="output" slot="markdown-html"></div>
       </arc-marked>`);
   }
@@ -29,7 +29,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function noContentFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 
@@ -40,7 +40,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function smartyPantsFixture() {
-    return fixture(`<arc-marked smartypants>
+    return fixture(html`<arc-marked smartypants>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
         # foo
@@ -52,7 +52,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function camelCaseHTMLFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 \`\`\`html
@@ -65,7 +65,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function badHTMLFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 \`\`\`html
@@ -78,7 +78,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function camelCaseHTMLWithoutChildFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <script type="text/markdown">
 \`\`\`html
 <div camelCase></div>
@@ -90,7 +90,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function badHTMLWithoutChildFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <script type="text/markdown">
 \`\`\`html
 <p><div></p></div>
@@ -102,7 +102,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function rendererFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
           [Link](http://url.com)
@@ -113,7 +113,7 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function sanitizerFixture() {
-    return fixture(`<arc-marked sanitize>
+    return fixture(html`<arc-marked sanitize>
         <div id="output" slot="markdown-html"></div>
         <script type="text/markdown">
 [Link](http://url.com" onclick="alert(1)")
@@ -128,9 +128,9 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function remoteContentFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="base/test/test.md">
+        <script type="text/markdown" src="test/test.md">
           # Loading
           Please wait...
         </script>
@@ -140,27 +140,27 @@ describe('ArcMarkedElement', () => {
    * @returns {Promise<ArcMarkedElement>}
    */
   async function badRemoteContentFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="base/test/test3.md"></script>
+        <script type="text/markdown" src="test/test3.md"></script>
       </arc-marked>`);
   }
    /**
    * @returns {Promise<ArcMarkedElement>}
    */
   async function sanitizedRemoteContentFixture() {
-    return fixture(`<arc-marked>
+    return fixture(html`<arc-marked>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="base/test/remoteSanitization.md"></script>
+        <script type="text/markdown" src="test/remoteSanitization.md"></script>
       </arc-marked>`);
   }
    /**
    * @returns {Promise<ArcMarkedElement>}
    */
   async function unsanitizedRemoteContentFixture() {
-    return fixture(`<arc-marked disableRemoteSanitization>
+    return fixture(html`<arc-marked disableRemoteSanitization>
         <div id="output" slot="markdown-html"></div>
-        <script type="text/markdown" src="base/test/remoteSanitization.md"></script>
+        <script type="text/markdown" src="test/remoteSanitization.md"></script>
       </arc-marked>`);
   }
 
@@ -402,9 +402,7 @@ describe('ArcMarkedElement', () => {
     });
 
     it('takes custom sanitizer', () => {
-      markedElement.sanitizer = (input) => {
-        return input.replace(/ onclick="[^"]+"/gim, '');
-      };
+      markedElement.sanitizer = (input) => input.replace(/ onclick="[^"]+"/gim, '');
 
       proofElement.innerHTML =
         '<p>[Link](<a href="http://url.com&quot;">http://url.com"</a> onclick="alert(1)")\n' +
@@ -427,9 +425,7 @@ describe('ArcMarkedElement', () => {
 
     it('takes custom link renderer', () => {
       markedElement.renderer = (renderer) => {
-        renderer.link = (href, title, text) => {
-          return `<a href="${href}" target="_blank">${text}</a>`;
-        };
+        renderer.link = (href, title, text) => `<a href="${href}" target="_blank">${text}</a>`;
       };
       proofElement.innerHTML = '<a href="http://url.com" target="_blank">Link</a>';
       expect(outputElement.innerHTML).to.include(proofElement.innerHTML);
@@ -466,7 +462,7 @@ describe('ArcMarkedElement', () => {
           markedElement.removeEventListener('markedloaded', firstCheck);
           proofElement.innerHTML = '<h1 id="test-2">Test 2</h1>\n';
           // @ts-ignore
-          markedElement.querySelector('[type="text/markdown"]').src = 'base/test/test2.md';
+          markedElement.querySelector('[type="text/markdown"]').src = 'test/test2.md';
           markedElement.addEventListener('markedloaded', () => {
             expect(outputElement.innerHTML).to.equal(proofElement.innerHTML);
             done();
