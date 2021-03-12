@@ -92,6 +92,26 @@
           "name": "outputElement",
           "type": "HTMLElement"
         }
+      ],
+      "events": [
+        {
+          "name": "marked-render-complete"
+        },
+        {
+          "name": "markedrendercomplete"
+        },
+        {
+          "name": "marked-loadend"
+        },
+        {
+          "name": "markedloaded"
+        },
+        {
+          "name": "syntax-highlight"
+        },
+        {
+          "name": "markedloaderror"
+        }
       ]
     }
   ]

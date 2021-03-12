@@ -72,6 +72,12 @@ as you would a regular DOM element:
   padding-left: 24px;
 }
 ```
+@fires marked-render-complete
+@fires markedrendercomplete
+@fires marked-loadend
+@fires markedloaded
+@fires syntax-highlight
+@fires markedloaderror
  */
 export declare class ArcMarkedElement extends LitElement {
   readonly styles: CSSResult;
