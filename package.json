@@ -35,7 +35,7 @@
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@open-wc/eslint-config": "^4.3.0",
-    "@open-wc/testing": "^2.5.33",
+    "@open-wc/testing": "^5.0.0",
     "@types/dompurify": "^2.2.2",
     "@web/dev-server": "^0.1.17",
     "@web/test-runner": "^0.13.8",
