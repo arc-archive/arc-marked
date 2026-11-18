@@ -25,21 +25,22 @@
     "email": "arc@mulesoft.com"
   },
   "dependencies": {
-    "dompurify": "^2.2.9",
+    "dompurify": "^3.4.17",
     "lit-element": "^2.5.1",
     "lit-html": "^1.4.1",
-    "marked": "^4.0.10"
+    "marked": "^4.0.12"
   },
   "devDependencies": {
     "@advanced-rest-client/arc-demo-helper": "^3.0.2",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@open-wc/eslint-config": "^4.3.0",
-    "@open-wc/testing": "^2.5.33",
+    "@open-wc/testing": "^5.0.0",
     "@types/dompurify": "^2.2.2",
     "@web/dev-server": "^0.1.17",
     "@web/test-runner": "^0.13.8",
     "@web/test-runner-playwright": "^0.8.6",
+    "playwright": "^1.65.1",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "husky": "^6.0.0",
