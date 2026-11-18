@@ -407,7 +407,7 @@ describe('ArcMarkedElement', () => {
       proofElement.innerHTML =
         '<p>[Link](<a href="http://url.com&quot;">http://url.com"</a> onclick="alert(1)")\n' +
         '<a href="http://url.com">Link</a></p>\n<pre><code class="language-html">&lt;a ' +
-        'href="http://url.com" onclick="alert(1)"&gt;Link&lt;/a&gt;</code></pre>\n';
+        'href="http://url.com" onclick="alert(1)"&gt;Link&lt;/a&gt;\n</code></pre>\n';
       expect(outputElement.innerHTML).to.include(proofElement.innerHTML);
     });
   });
